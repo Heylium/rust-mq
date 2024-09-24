@@ -1,0 +1,1 @@
+pub const DEFAULT_PLACEMENT_CENTER_CONFIG: &str = "config/placement-center.toml";
