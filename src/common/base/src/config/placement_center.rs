@@ -55,3 +55,25 @@ pub fn placement_center_conf() -> &'static PlacementCenterConfig {
         }
     }
 }
+
+
+mod tests {
+    use crate::config::placement_center::{
+        init_placement_center_conf_by_path,
+        placement_center_conf,
+    };
+
+    #[test]
+    fn config_init_test() {
+        let path = format!(
+            "{}/../../../config/placement-center.toml",
+            env!("CARGO_MANIFEST_DIR")
+        );
+
+        println!("{}", path);
+        init_placement_center_conf_by_path(&path);
+        let config = placement_center_conf();
+        assert_eq!(config.node_id, 1);
+        assert_eq!(config.grpc_port, 1228);
+    }
+}
