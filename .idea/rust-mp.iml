@@ -9,10 +9,12 @@
       <sourceFolder url="file://$MODULE_DIR$/src/placement-center/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/protocol/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/protocol/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/common/base/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/src/cmd/target" />
       <excludeFolder url="file://$MODULE_DIR$/src/common/base/target" />
       <excludeFolder url="file://$MODULE_DIR$/src/placement-center/target" />
       <excludeFolder url="file://$MODULE_DIR$/src/protocol/target" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
