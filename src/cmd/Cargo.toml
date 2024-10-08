@@ -1,6 +1,18 @@
 [package]
 name = "cmd"
-version = "0.1.0"
-edition = "2021"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "placement-center"
+path = "src/placement-center/server.rs"
 
 [dependencies]
+clap = { version = "4.4.7", features = ["derive"] }
+common-base.workspace = true
+placement-center.workspace = true
+log.workspace = true
+log4rs.workspace = true
+tokio.workspace = true
+
