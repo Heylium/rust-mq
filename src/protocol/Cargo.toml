@@ -1,6 +1,13 @@
 [package]
 name = "protocol"
-version = "0.1.0"
-edition = "2021"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
 
 [dependencies]
+serde.workspace = true
+tonic-build.workspace = true
+tonic.workspace = true
+prost.workspace = true
+dashmap.workspace = true
+tokio-util.workspace = true
