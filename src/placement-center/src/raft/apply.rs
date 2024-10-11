@@ -72,3 +72,103 @@ impl fmt::Display for StorageData {
 pub struct RaftMachineApply {
     raft_status_machine_sender: tokio::sync::mpsc::Sender<RaftMessage>,
 }
+
+impl RaftMachineApply {
+    pub fn new(raft_sender: tokio::sync::mpsc::Sender<RaftMessage>) -> Self {
+        RaftMachineApply {
+            raft_status_machine_sender: raft_sender,
+        }
+    }
+
+    pub async fn transfer_leader(&self, node_id: u64) -> Result<(), RobustMqError> {
+        let (sx, rx) = oneshot::channel::<RaftResponseMessage>();
+        Ok(self
+            .apply_raft_status_machine_message(
+                RaftMessage::TransferLeader {
+                    node_id,
+                    chan: sx,
+                },
+                "transfer_leader".to_string(),
+                rx,
+            ).await?
+        )
+    }
+
+    pub async fn apply_propose_message(
+        &self,
+        data: StorageData,
+        action: String,
+    ) -> Result<(), RobustMqError> {
+        let (sx, rx) = oneshot::channel::<RaftResponseMessage>();
+        Ok(self
+            .apply_raft_status_machine_message(
+                RaftMessage::Propose {
+                    data: serialize(&data).unwrap(),
+                    chan: sx,
+                },
+                action,
+                rx,
+            ).await?
+        )
+    }
+
+    pub async fn  apply_raft_message(
+        &self,
+        message: raftPreludeMessage,
+        action: String,
+    ) -> Result<(), RobustMqError> {
+        let (sx, rx) = oneshot::channel::<RaftResponseMessage>();
+        Ok(self
+            .apply_raft_status_machine_message(
+                RaftMessage::Raft { message, chan: sx },
+                action,
+                rx,
+            ).await?
+        )
+    }
+
+    pub async fn apply_conf_raft_message(
+        &self,
+        change: ConfChange,
+        action: String,
+    ) -> Result<(), RobustMqError> {
+        let (sx, rx) = oneshot::channel::<RaftResponseMessage>();
+        Ok(self
+            .apply_raft_status_machine_message(
+                RaftMessage::ConfChange { change, chan: sx },
+                action,
+                rx,
+            ).await?
+        )
+    }
+
+    pub async fn apply_raft_status_machine_message(
+        &self,
+        message: RaftMessage,
+        action: String,
+        rx: Receiver<RaftResponseMessage>,
+    ) ->  Result<(), RobustMqError> {
+        let _ = self.raft_status_machine_sender.send(message).await;
+        if !self.wait_recv_chan_resp(rx).await {
+            return Err(RobustMqError::RaftLogCommitTimeout(action))
+        }
+        Ok(())
+    }
+
+    pub async fn wait_recv_chan_resp(&self, rx: Receiver<RaftResponseMessage>) -> bool {
+        let res = timeout(Duration::from_secs(30), async {
+            match rx.await {
+                Ok(val) => {
+                    return val
+                },
+                Err(_) => {
+                    return RaftResponseMessage::Fail
+                },
+            }
+        });
+        match res.await {
+            Ok(_) => true,
+            Err(_) => false,
+        }
+    }
+}
