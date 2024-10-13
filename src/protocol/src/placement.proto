@@ -1,0 +1,21 @@
+syntax = "proto3";
+package placement;
+import "common.proto";
+
+service PlacementCenterService {
+  rpc SendRaftMessage(SendRaftMessageRequest) returns(SendRaftMessageReply){}
+
+  rpc SendRaftConfChange(SendRaftConfChangeRequest) returns(SendRaftConfChangeReply){}
+}
+
+message SendRaftMessageRequest {
+  bytes message = 1;
+}
+
+message SendRaftMessageReply {}
+
+message SendRaftConfChangeRequest {
+  bytes message = 1;
+}
+
+message SendRaftConfChangeReply {}
