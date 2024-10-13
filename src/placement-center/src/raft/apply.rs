@@ -1,5 +1,5 @@
 use bincode::serialize;
-use common_base::errors::RobustMqError;
+use common_base::errors::RobustMQError;
 use raft::eraftpb::ConfChange;
 use raft::eraftpb::Message as raftPreludeMessage;
 use serde::Deserialize;
@@ -80,7 +80,7 @@ impl RaftMachineApply {
         }
     }
 
-    pub async fn transfer_leader(&self, node_id: u64) -> Result<(), RobustMqError> {
+    pub async fn transfer_leader(&self, node_id: u64) -> Result<(), RobustMQError> {
         let (sx, rx) = oneshot::channel::<RaftResponseMessage>();
         Ok(self
             .apply_raft_status_machine_message(
@@ -98,7 +98,7 @@ impl RaftMachineApply {
         &self,
         data: StorageData,
         action: String,
-    ) -> Result<(), RobustMqError> {
+    ) -> Result<(), RobustMQError> {
         let (sx, rx) = oneshot::channel::<RaftResponseMessage>();
         Ok(self
             .apply_raft_status_machine_message(
@@ -116,7 +116,7 @@ impl RaftMachineApply {
         &self,
         message: raftPreludeMessage,
         action: String,
-    ) -> Result<(), RobustMqError> {
+    ) -> Result<(), RobustMQError> {
         let (sx, rx) = oneshot::channel::<RaftResponseMessage>();
         Ok(self
             .apply_raft_status_machine_message(
@@ -131,7 +131,7 @@ impl RaftMachineApply {
         &self,
         change: ConfChange,
         action: String,
-    ) -> Result<(), RobustMqError> {
+    ) -> Result<(), RobustMQError> {
         let (sx, rx) = oneshot::channel::<RaftResponseMessage>();
         Ok(self
             .apply_raft_status_machine_message(
@@ -147,10 +147,10 @@ impl RaftMachineApply {
         message: RaftMessage,
         action: String,
         rx: Receiver<RaftResponseMessage>,
-    ) ->  Result<(), RobustMqError> {
+    ) ->  Result<(), RobustMQError> {
         let _ = self.raft_status_machine_sender.send(message).await;
         if !self.wait_recv_chan_resp(rx).await {
-            return Err(RobustMqError::RaftLogCommitTimeout(action))
+            return Err(RobustMQError::RaftLogCommitTimeout(action))
         }
         Ok(())
     }

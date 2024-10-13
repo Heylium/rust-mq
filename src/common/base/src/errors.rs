@@ -3,15 +3,15 @@ use std::io;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
-pub enum RobustMqError {
+pub enum RobustMQError {
     #[error("io error")]
     IOJsonError(#[from] io::Error),
 
     #[error("{0}")]
     CommonError(String),
 
-    // #[error("{0}")]
-    // RocksdbError(#[from] rocksdb::Error),
+    #[error("{0}")]
+    RocksdbError(#[from] rocksdb::Error),
 
     #[error("No available nodes in the cluster")]
     ClusterNoAvailableNode,

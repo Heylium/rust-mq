@@ -25,7 +25,7 @@ pub struct PlacementCenterLog {
     pub log_path: String,
 }
 
-pub fn default_node_id() -> u32 {
+pub fn default_node_id() -> u64 {
     1
 }
 
