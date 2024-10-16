@@ -11,6 +11,7 @@ mod test {
                     "src/common.proto",
                     "src/kv.proto",
                     "src/placement.proto",
+                    "src/openraft.proto"
                 ],
                 &["src/"]
             ).unwrap();

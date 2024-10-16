@@ -1,5 +1,6 @@
 
 use std::io;
+use tonic::Status;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
@@ -21,4 +22,7 @@ pub enum RobustMQError {
 
     #[error("Description The interface {0} submitted logs to the commit log")]
     RaftLogCommitTimeout(String),
+
+    #[error("Grpc call of the node failed,Grpc status was {0}")]
+    GrpcServerStatus(Status),
 }
