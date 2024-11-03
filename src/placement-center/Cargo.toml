@@ -25,3 +25,9 @@ slog = "2"
 slog-term = "2.9.0"
 slog-async = "2.8.0"
 clap = { version = "4.5.20", features = ["derive"] }
+clients.workspace = true
+openraft.workspace = true
+byteorder.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+mobc.workspace = true

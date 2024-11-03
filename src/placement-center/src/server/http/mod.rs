@@ -1,5 +1,6 @@
 pub mod server;
 pub mod index;
+pub mod openraft;
 
 pub(crate) fn v1_path(path: &str) -> String {
     format!("/v1{}", path)
